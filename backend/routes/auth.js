@@ -7,10 +7,11 @@ const User = require('../models/User')
 const {
     body,
     validationResult
+    
 } = require('express-validator');
 
 
-
+// Create a user 
 router.post('/createuser', [
     body('email', "Please Enter Valid Email").isEmail(),
     body('name', "Username Must Contain Atleast 3 Char").isLength({ min: 3}),
@@ -29,6 +30,9 @@ router.post('/createuser', [
         return res.status(400).json({error : "Sorry user with this email is already exist"})
     }
 
+
+
+    //password hashing
     const salt = await bcrypt.genSalt(10);
     const securePass = await bcrypt.hash(req.body.password, salt);
 
@@ -44,6 +48,7 @@ router.post('/createuser', [
         }
     }
 
+    //returning JWT Token
     const JWT_SECRET = "inotebook";
     var authToken = jwt.sign(data, JWT_SECRET);
     // console.log(authToken);
@@ -54,8 +59,52 @@ router.post('/createuser', [
         console.error(error.message)
         res.status(500).send("some error has been ouucred")
     }
-    // .then(user => res.json(user)) 
-    // .catch(err => res.json(err))
+})
+
+
+
+// User login
+router.post('/login', [
+    body('email', "Please Enter Valid Email").isEmail(),
+    body('password', "Password should not be Empty").exists()
+], async (req, res) => {
+
+    const errors = validationResult(req);
+    if (!errors.isEmpty()) {
+        return res.status(400).json({ errors: errors.array() });
+    }
+
+    const {email, password} = req.body;
+
+    try {
+        let user = await User.findOne({email})
+        if(!user)
+        {
+            return res.status(400).json({error: "Please Login with correct credentials"})
+        }
+
+        let passCompare = await bcrypt.compare(password, user.password)
+        if(!passCompare)
+        {
+            return res.status(400).json({error: "Please Login with correct credentials"})
+        }
+
+        const data = {
+            user :{
+                id: user.id
+            }
+        }
+    
+        //returning JWT Token
+        const JWT_SECRET = "inotebook";
+        var authToken = jwt.sign(data, JWT_SECRET);
+        // console.log(authToken);
+        res.json({authToken})
+        
+    } catch (error) {
+        console.error(error.message)
+        res.status(500).send("some error has been ouucred")
+    }
 })
 
 module.exports = router
