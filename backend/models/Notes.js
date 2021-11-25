@@ -1,6 +1,8 @@
 const moongose = require('mongoose')
+const {Schema} = mongoose
 
-const NotesSchema = new Schema({
+
+const NoteSchema = new Schema({
     title: {
         type: String,
         required: true
@@ -15,4 +17,4 @@ const NotesSchema = new Schema({
     }
 })
 
-module.exports = moongose.model('notes', NotesSchema)
+module.exports = moongose.model('Note', NoteSchema)

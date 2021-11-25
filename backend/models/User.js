@@ -1,4 +1,5 @@
 const mongoose = require('mongoose')
+const {Schema} = mongoose
 
 const UserSchema = new Schema ({
     name:{
@@ -20,5 +21,7 @@ const UserSchema = new Schema ({
     }
 })
 
-mmodule.exports = mongoose.model('user', UserSchema)
+const user = mongoose.model('User', UserSchema)
+user.createIndexes()
+module.exports = user
 
