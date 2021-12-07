@@ -6,6 +6,11 @@ import {
 const Navbar = () => {
 
   let location = useLocation();
+
+  const handleLogout = () => {
+    localStorage.removeItem('token')
+    window.location.reload(false);
+  }
   
   useEffect(() => {
   }, [location]);
@@ -23,11 +28,20 @@ const Navbar = () => {
         <li className="nav-item">
           <Link className={`nav-link {location.pathname==="/" ? "active" : ""}`} aria-current="page" to="/">Home</Link>
         </li>
-        <li className="nav-item">
-          <Link className={`nav-link {location.pathname==="/about" ? "active" : ""}`} to="/about">About</Link>
-        </li>
       </ul>
     </div>
+    {!localStorage.getItem('token') ?
+    <ul className="navbar-nav me-auto mb-2 mb-lg-0">
+        <li className="nav-item">
+          <Link className={`nav-link {location.pathname==="/login" ? "active" : ""}`} aria-current="page" to="/login">Login</Link>
+        </li>
+        <li className="nav-item">
+          <Link className={`nav-link {location.pathname==="/signup" ? "active" : ""}`} to="/Signup">Signup</Link>
+        </li>
+      </ul>
+    :
+    <button className="btn btn-warning  " onClick={handleLogout}>Logout</button>
+  }
   </div>
 </nav>
         </div>

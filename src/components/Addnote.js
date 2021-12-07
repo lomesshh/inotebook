@@ -67,6 +67,7 @@ const Addnote = () => {
             Tag
           </h6>
           <input
+            placeholder="eg. personal, official"
             onChange={onChange}
             value={note.tag}
             type="text"
@@ -76,7 +77,7 @@ const Addnote = () => {
           />
         </div>
         <div className="btn text-center">
-        <button onClick={handleClick} >
+        <button onClick={handleClick} disabled={note.title.length < 1 || note.title.description < 1 || note.title.tag < 1   } >
           <div className="svg-wrapper-1">
             <div className="svg-wrapper">
               <svg

@@ -1,6 +1,9 @@
 import React,{useContext} from "react";
 import noteContext from "./../context/notes/noteContext";
 
+import { ToastContainer, toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
+
 
 const Noteitem = ({ note, updateNote }) => {
 
@@ -21,9 +24,33 @@ const Noteitem = ({ note, updateNote }) => {
           <div className="container">
             <div className="row">
               <div className="col">
-                <button onClick={() => deleteNote(note._id)}>
+                <button onClick={() => {
+                  deleteNote(note._id)
+                  toast.error('Note Deleted Successfully !', {
+                    position: "top-right",
+                    autoClose: 3000,
+                    hideProgressBar: false,
+                    closeOnClick: true,
+                    pauseOnHover: true,
+                    draggable: true,
+                    progress: undefined,
+                    })
+                }
+                }>
                   <i className="far fa-trash-alt mx-3"></i>
                 </button>
+                <ToastContainer
+                  theme="dark"
+                  position="top-right"
+                  autoClose={5000}
+                  hideProgressBar={false}
+                  newestOnTop={false}
+                  closeOnClick
+                  rtl={false}
+                  pauseOnFocusLoss
+                  draggable
+                  pauseOnHover
+                />
               </div>
               <div className="col">
                 <button onClick={() => updateNote(note)}>

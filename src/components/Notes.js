@@ -1,14 +1,25 @@
 import React, {useContext, useEffect, useRef, useState} from 'react'
+import { useNavigate } from 'react-router-dom'
 import noteContext from './../context/notes/noteContext';
 import Noteitem from './Noteitem';
 import Addnote from './Addnote';
 
+import { ToastContainer, toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
+
 const Notes = () => {
   const context = useContext(noteContext);
   const { notes, getNotes, editNote } = context;
+  let history = useNavigate();
+
   useEffect(() => {
+      if(localStorage.getItem('token'))
+      {
       getNotes()
-      // eslint-disable-next-line
+      }
+      else{
+          history("/login")
+      }     // eslint-disable-next-line
   }, [])
   const ref = useRef(null)
   const refClose = useRef(null)
@@ -22,6 +33,15 @@ const Notes = () => {
   const handleClick = (e)=>{ 
       editNote(note.id, note.etitle, note.edescription, note.etag)
       refClose.current.click();
+      toast.info('Note Updated Successfully !', {
+        position: "top-right",
+        autoClose: 3000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+        progress: undefined,
+        })
   }
 
   const onChange = (e)=>{
@@ -61,7 +81,19 @@ const Notes = () => {
                       <div className="modal-footer">
                           <button ref={refClose} type="button" className="btn btn-secondary" data-bs-dismiss="modal">Close</button>
                           <button disabled={note.etitle.length<5 || note.edescription.length<5} onClick={handleClick} type="button" className="btn btn-primary">Update Note</button>
-                      </div>
+                          <ToastContainer
+                          theme="dark"
+                          position="top-right"
+                          autoClose={5000}
+                          hideProgressBar={false}
+                          newestOnTop={false}
+                          closeOnClick
+                          rtl={false}
+                          pauseOnFocusLoss
+                          draggable
+                          pauseOnHover
+                        />
+                          </div>
                   </div>
               </div>
           </div>
