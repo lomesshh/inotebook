@@ -68,7 +68,7 @@ router.put('/updatenote/:id', fetchuser, async (req, res) => {
         return res.status(401).send("Sorry ! You are not allowed to modify this note")
     }
 
-    note = await Note.findByIdAndUpdate(req.params.id, {$set: newNote}, {new:true}) 
+    note = await Note.findByIdAndUpdate(req.params.id, {$set: newNote}, {new:true})
     res.json(note)
 
     } 
