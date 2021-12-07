@@ -2,7 +2,7 @@ import React,{useContext} from "react";
 import noteContext from "./../context/notes/noteContext";
 
 
-const Noteitem = ({ note }) => {
+const Noteitem = ({ note, updateNote }) => {
 
   const context = useContext(noteContext);
   const { deleteNote } = context;
@@ -26,7 +26,7 @@ const Noteitem = ({ note }) => {
                 </button>
               </div>
               <div className="col">
-                <button>
+                <button onClick={() => updateNote(note)}>
                   <i className="far fa-edit mx-3"></i>
                 </button>
               </div>
