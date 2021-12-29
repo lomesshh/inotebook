@@ -1,5 +1,6 @@
 const connectToMongo = require('./db');
 const express = require('express')
+const path = require('path')
 var cors = require('cors') 
 
 connectToMongo();
@@ -14,6 +15,13 @@ app.use(express.json())
 app.use('/api/auth', require('./routes/auth'))
 app.use('/api/notes', require('./routes/notes'))
 
+if(process.env.NODE_ENV === 'production'){
+  app.use(express.static('client/build'))
+  app.get('/', (req, res) => {
+      app.use(express.static(path.resolve(__dirname, 'client', 'build'))),
+      res.sendFile(path.join(__dirname, 'client', 'build', 'index.html'))
+  })
+}
 
 app.listen(port, () => {
   console.log(`iNoteBook Backend Running at http://localhost:${port}`)
